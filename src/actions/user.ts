@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { signIn } from "../../auth";
 import { User } from "lucide-react";
+import { revalidatePath } from "next/cache";
 
 export const loginSignup = async (formData: FormData, isLogin: boolean) => {
   let user: { isAdmin: boolean } | null = null;
@@ -60,4 +61,22 @@ export const loginSignup = async (formData: FormData, isLogin: boolean) => {
     }
     return { error: "An unexpected error occurred" };
   }
+}
+
+
+export const updateUser = async(id:string,userId:string,isAdmin:boolean)=>{
+  let inventory;
+  try {
+    inventory = await db.inventory.updateMany({
+      where:{id},
+      data:{userId},
+    });
+    if(!inventory){
+      return{error:"failed to transfer"};
+    }
+}catch(error){
+  return{error:"failed to transfer"};
+}
+revalidatePath(`${isAdmin?"dashboard":"/"}`)
+return inventory;
 }
