@@ -64,19 +64,19 @@ export const loginSignup = async (formData: FormData, isLogin: boolean) => {
 }
 
 
-export const updateUser = async(id:string,userId:string,isAdmin:boolean)=>{
+export const updateUser = async (id: string, userId: string, isAdmin: boolean) => {
   let inventory;
   try {
     inventory = await db.inventory.updateMany({
-      where:{id},
-      data:{userId},
+      where: { id },
+      data: { userId },
     });
-    if(!inventory){
-      return{error:"failed to transfer"};
+    if (!inventory) {
+      return { error: "failed to transfer" };
     }
-}catch(error){
-  return{error:"failed to transfer"};
-}
-revalidatePath(`${isAdmin?"dashboard":"/"}`)
-return inventory;
+  } catch (error) {
+    return { error: "failed to transfer" };
+  }
+  revalidatePath(`${isAdmin ? "dashboard" : "/"}`)
+  return inventory;
 }

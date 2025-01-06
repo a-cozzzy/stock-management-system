@@ -15,6 +15,9 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
     if (user && !user?.isAdmin) {
       redirect("/"); 
     } 
+    if(!user){
+      redirect("/login")
+    }
   } 
 
   return (
