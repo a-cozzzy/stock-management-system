@@ -2,11 +2,8 @@
 import { loginSignup } from '@/actions/user'
 import FormInput from '@/components/FormInput'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Toast } from '@/components/ui/toast'
 import Link from 'next/link'
-import React, { useOptimistic, useState } from 'react'
-import { toast } from 'sonner'
+import React, { useOptimistic } from 'react'
 
 const signup = () => {
   const [loading, setloading] = useOptimistic(false);

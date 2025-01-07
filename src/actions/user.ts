@@ -3,7 +3,6 @@
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "../../auth";
-import { User } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
 export const loginSignup = async (formData: FormData, isLogin: boolean) => {
@@ -112,58 +111,6 @@ export const updateUserRole = async (formData: FormData, isAdmin: boolean, data:
   revalidatePath(`/dashboard/clients`);
   return user;
 }
-
-///add or update inventory
-
-// export const addUpdateInventory = async (formData: FormData, data: any) => {
-//   const session = await auth();
-
-//   const name = formData.get("name") as string | null;
-//   const quantity = formData.get("quantity") as string | null;
-//   const getPrice = formData.get("price") as string | null;
-//   const price = Number(getPrice);
-//   const quantityNumber = Number(quantity);
-
-//   // Fetch the user based on session email
-//   const user = await db.user.findUnique({
-//     where: { email: session?.user?.email! },
-//   });
-
-//   if (!quantity || !price || !name) {
-//     return { error: "All fields are required" };
-//   }
-
-//   // Check if user is found
-//   if (!user) {
-//     return { error: "User not found" };
-//   }
-
-//   let inventory;
-//   try {
-//     if (data?.id) {
-//       // Update existing inventory if id exists
-//       inventory = await db.inventory.update({
-//         where: { id: data?.id },
-//         data: { name, quantity: quantityNumber, price, userId: user?.id },
-//       });
-//     } else {
-//       // Create new inventory if id doesn't exist
-//       inventory = await db.inventory.create({
-//         data: { name, quantity: quantityNumber, price, userId: user?.id },
-//       });
-//     }
-
-//     if (!inventory) {
-//       return { error: "Failed to create or update inventory" };
-//     }
-//   } catch (error) {
-//     return { error: "Failed to create or update inventory" };
-//   }
-
-//   // Revalidate the path after the update/create
-//   revalidatePath(`/dashboard`);
-//   return inventory;
-// };
 
 export const addUpdateInventory = async (formData: FormData, data: any) => {
   const session = await auth();

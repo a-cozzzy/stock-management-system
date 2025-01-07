@@ -2,9 +2,8 @@
 import { loginSignup } from '@/actions/user'
 import FormInput from '@/components/FormInput'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
 import Link from 'next/link'
-import React, { useOptimistic, useState } from 'react'
+import React, { useOptimistic} from 'react'
 import { toast } from 'sonner'
 
 const login = () => {
