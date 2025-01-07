@@ -265,6 +265,8 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { signOut } from "next-auth/react"
 
 
+
+
 export const columns: ColumnDef<InventoryDataProps>[] = [
     {
         id: "select",

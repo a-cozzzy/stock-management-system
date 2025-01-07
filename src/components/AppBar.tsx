@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
-import { auth, signOut } from '../../auth'
+import { auth} from '../../auth'
+import { signOut } from 'next-auth/react';
 
 
 const AppBar = async () => {

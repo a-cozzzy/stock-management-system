@@ -15,10 +15,9 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
     if (user && !user?.isAdmin) {
       redirect("/"); 
     } 
-    if(!user){
-      redirect("/login")
-    }
-  } 
+  } else {
+    redirect("/login")
+  }
 
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[0.25fr_1fr]">
