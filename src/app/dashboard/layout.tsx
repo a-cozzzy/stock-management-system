@@ -1,22 +1,26 @@
-import Sidebar from '@/components/Sidebar'
+import Sidebar from '@/components/Sidebar';
 import { redirect } from 'next/navigation';
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from 'react';
 import { auth } from '../../../auth';
 import { db } from '@/lib/db';
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => { 
-  const session = await auth() 
+  const session = await auth();
 
-  if (session && session?.user) { 
-    const user = await db.user.findUnique({
-      where: { email: session?.user?.email! },
-    });
+  if (!session || !session.user || !session.user.email) {
+    // Redirect if session or email is missing
+    redirect("/login");
+    return null;
+  }
 
-    if (user && !user?.isAdmin) {
-      redirect("/"); 
-    } 
-  } else {
-    redirect("/login")
+  const user = await db.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (user && !user.isAdmin) {
+    // Redirect if user is not admin
+    redirect("/");
+    return null;
   }
 
   return (
@@ -31,4 +35,4 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   );
 }
 
-export default DashboardLayout
+export default DashboardLayout;

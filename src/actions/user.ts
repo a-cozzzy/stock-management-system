@@ -5,6 +5,23 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "../../auth";
 import { revalidatePath } from "next/cache";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+}
+
+interface Inventory {
+  id?: string;
+  name: string;
+  quantity: number;
+  price: number;
+  totalCost: number;
+  userId: string;
+}
+
 export const loginSignup = async (formData: FormData, isLogin: boolean) => {
   let user: { isAdmin: boolean } | null = null;
 
@@ -50,17 +67,10 @@ export const loginSignup = async (formData: FormData, isLogin: boolean) => {
       // For successful login as regular user
       redirect("http://localhost:3000");
     }
-  } catch (error) {
-    if ((error as Error)?.message === "NEXT_REDIRECT") {
-      if (user?.isAdmin) {
-        redirect("http://localhost:3000/dashboard");
-      } else {
-        redirect("http://localhost:3000");
-      }
-    }
+  } catch {
     return { error: "An unexpected error occurred" };
   }
-}
+};
 
 export const updateUser = async (id: string, userId: string, isAdmin: boolean) => {
   let inventory;
@@ -72,14 +82,14 @@ export const updateUser = async (id: string, userId: string, isAdmin: boolean) =
     if (!inventory) {
       return { error: "Failed to transfer" };
     }
-  } catch (error) {
+  } catch {
     return { error: "Failed to transfer" };
   }
   revalidatePath(`${isAdmin ? "dashboard" : "/"}`);
   return inventory;
-}
+};
 
-export const updateUserRole = async (formData: FormData, isAdmin: boolean, data: any) => {
+export const updateUserRole = async (formData: FormData, isAdmin: boolean, data: User) => {
   const name = formData.get("name") as string | null;
   const email = formData.get("email") as string | null;
   const password = formData.get("password") as string | null;
@@ -105,14 +115,14 @@ export const updateUserRole = async (formData: FormData, isAdmin: boolean, data:
     if (!user) {
       return { error: "User not updated" };
     }
-  } catch (error) {
+  } catch {
     return { error: "User not updated" };
   }
   revalidatePath(`/dashboard/clients`);
   return user;
-}
+};
 
-export const addUpdateInventory = async (formData: FormData, data: any) => {
+export const addUpdateInventory = async (formData: FormData, data: Inventory) => {
   const session = await auth();
 
   const name = formData.get("name") as string | null;
@@ -125,8 +135,12 @@ export const addUpdateInventory = async (formData: FormData, data: any) => {
   const totalCost = quantityNumber * price;
 
   // Fetch the user based on session email
+  if (!session?.user?.email) {
+    return { error: "User email not found" };
+  }
+
   const user = await db.user.findUnique({
-    where: { email: session?.user?.email! },
+    where: { email: session.user.email },
   });
 
   if (!quantity || !price || !name) {
@@ -156,7 +170,7 @@ export const addUpdateInventory = async (formData: FormData, data: any) => {
     if (!inventory) {
       return { error: "Failed to create or update inventory" };
     }
-  } catch (error) {
+  } catch {
     return { error: "Failed to create or update inventory" };
   }
 
@@ -165,21 +179,18 @@ export const addUpdateInventory = async (formData: FormData, data: any) => {
   return inventory;
 };
 
-export const DeleteInventory = async(id:string)=>{
-  try{
+export const DeleteInventory = async (id: string) => {
+  try {
     const result = await db.inventory.delete({
-      where:{id},
+      where: { id },
     });
 
     revalidatePath("/dashboard");
-    
-    if(!result){
-      return {error: "Inventory not deleted"};
+
+    if (!result) {
+      return { error: "Inventory not deleted" };
     }
-  }catch (error){
-    return {error: "Failed to delete inventory"};
+  } catch {
+    return { error: "Failed to delete inventory" };
   }
-  
 };
-
-

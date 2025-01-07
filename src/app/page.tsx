@@ -8,32 +8,33 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await auth();
 
-
-  if(session){
+  // Ensure session and session.user.email exist
+  if (session && session.user?.email) {
     const user = await db.user.findUnique({
-      where: {email: session?.user?.email! },
-      include: { inventories:true }
+      where: { email: session.user.email },
+      include: { inventories: true }
     });
-    console.log(user,"user");
 
+    console.log(user, "user");
 
-  if(user && !user?.isAdmin){
-    return (
-  <>
-  <AppBar/>
-  <ClientComp user={user}/>
-  </>
-      )
-  }else if(user && user?.isAdmin){
-    redirect("/dashboard");
-  }else{
-    return (
-      <div className="">
-          <AppBar />
-          <AuthDesign/>
-      </div>
-    );
+    if (user) {
+      if (!user.isAdmin) {
+        return (
+          <>
+            <AppBar />
+            <ClientComp user={user} />
+          </>
+        );
+      } else {
+        redirect("/dashboard");
+      }
+    }
   }
-  }
- 
+
+  return (
+    <div className="">
+      <AppBar />
+      <AuthDesign />
+    </div>
+  );
 }

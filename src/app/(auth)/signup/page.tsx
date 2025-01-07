@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React, { useOptimistic } from 'react'
 
-const signup = () => {
+const Signup = () => {
   const [loading, setloading] = useOptimistic(false);
   const handleSubmit = async(formData: FormData)=>{
     setloading(true);
@@ -36,5 +36,5 @@ const signup = () => {
   )
 }
 
-export default signup
+export default Signup
 

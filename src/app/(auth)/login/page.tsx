@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React, { useOptimistic} from 'react'
 import { toast } from 'sonner'
 
-const login = () => {
+const Login = () => {
   const [loading, setloading] = useOptimistic(false);
   const handleSubmit = async(formData: FormData)=>{
     setloading(true);
@@ -28,10 +28,10 @@ const login = () => {
           <FormInput name = "password" type="password" placeholder='Enter Password' label="Password " />
           <Button type='submit' className={`${loading && "disabled cursor-not-allowed"} w-full bg-blue-500 mt-5`}>{loading?"loading...":"Login"}</Button>
         </form>
-        <Link href="/signup" className='text-center text-blue-800 cursor-pointer'> Don't have an account? Sign Up! </Link>
+        <Link href="/signup" className='text-center text-blue-800 cursor-pointer'> Don&apos;t have an account? Sign Up! </Link>
       </div>
     </div>
   )
 }
 
-export default login
+export default Login
