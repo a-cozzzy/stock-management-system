@@ -47,7 +47,7 @@ export const loginSignup = async (formData: FormData, isLogin: boolean) => {
       email,
       password,
       isLogin,
-      callbackUrl: "http://localhost:3000", // Fixed callback URL
+      callbackUrl: "http://localhost:3000/", // Fixed callback URL
     });
 
     if (result?.error) {
@@ -58,15 +58,16 @@ export const loginSignup = async (formData: FormData, isLogin: boolean) => {
 
     // Check if it's a signup or login
     if (!isLogin && !result?.error) {
-      // For successful signup
-      redirect("http://localhost:3000/login");
+      redirect("http://localhost:3000/");
+      return; // Ensure no further code runs after redirect
     } else if (user?.isAdmin) {
-      // For successful login as admin
       redirect("http://localhost:3000/dashboard");
+      return; // Ensure no further code runs after redirect
     } else {
-      // For successful login as regular user
-      redirect("http://localhost:3000");
+      redirect("http://localhost:3000/");
+      return; // Ensure no further code runs after redirect
     }
+    
   } catch {
     return { error: "An unexpected error occurred" };
   }

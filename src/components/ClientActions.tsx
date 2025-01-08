@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -22,6 +21,15 @@ import {
 } from "@/components/ui/select"
 import { updateUserRole } from '@/actions/user'
 import { toast } from 'sonner'
+
+interface RowData {
+  original: {
+    role?: string;
+    name?: string;
+    email?: string;
+    password?: string;
+  };
+}
 
 const ClientActions = ({ row }: any) => {
   const data = row.original;
@@ -52,7 +60,7 @@ const ClientActions = ({ row }: any) => {
         <SheetHeader>
           <SheetTitle>Edit User</SheetTitle>
           <SheetDescription>
-            Make changes to your user here. Click save when you're done.
+            Make changes to your user here. Click save when you&apos;re done.
           </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
